@@ -73,9 +73,9 @@ game1 = Game.create(name: "Note Names and Sequences", order_matters: true, intro
 g1l1 = [[c], [c4]]
 
 ### Level 2: Add Sol
-g1l2 = [[g]]
+g1l2 = [[g], [g], [c], [c4], [g]]
 ### Level 3: Add Mi
-g1l3 = [[e]]
+g1l3 = [[e], [e], [e], [g], [c], [c4]]
 ### Level 4: Same notes (2 note sequences)
 g1l4 = []
 [c,c4,e, g].each {|e1| [c,c4,e, g].each {|e2| g1l4 << [e1,e2]}}
@@ -88,7 +88,7 @@ end
 g1l5 << [d,d]
 ### Level 6: Same notes (3 note sequences)
 g1l6 = []
-[c,c4,e, g, d].each {|e1| [c,c4,e, g, d].each {|e2| [c,c4,e,g,d].each {|e3| g1l4 << [e1,e2, e3]}}}
+[c,c4,e, g, d].each {|e1| [c,c4,e, g, d].each {|e2| [c,c4,e,g,d].each {|e3| g1l6 << [e1,e2, e3]}}}
 ### Level 7: Add La (2 notes)
 g1l7 = []
 [c,c4,e,g, d].each do |e1| 
@@ -112,37 +112,38 @@ end
 g1l9 << [b, b]
 ### Level 10: All Notes (3 note patterns)
 g1l10 = []
-[c,c4,e, g, d, a, f, b].each {|e1| [c,c4,e, g, d, a, f, b].each {|e2| [c,c4,e,g,d, a, f, b].each {|e3| g1l4 << [e1,e2, e3]}}}
+[c,c4,e, g, d, a, f, b].each {|e1| [c,c4,e, g, d, a, f, b].each {|e2| [c,c4,e,g,d, a, f, b].each {|e3| g1l10 << [e1,e2, e3]}}}
 ### Level 11: All Notes (4 note patterns)
 g1l11 = []
-[c,c4,e, g, d, a, f, b].each {|e1| [c,c4,e, g, d, a, f, b].each {|e2| [c,c4,e,g,d, a, f, b].each {|e3| [c,c4,e,g,d, a, f, b].each {|e4| g1l4 << [e1,e2, e3, e4]}}}}
+[c,c4,e, g, d, a, f, b].each {|e1| [c,c4,e, g, d, a, f, b].each {|e2| [c,c4,e,g,d, a, f, b].each {|e3| [c,c4,e,g,d, a, f, b].each {|e4| g1l11 << [e1,e2, e3, e4]}}}}
 
 g1messages = [
     "Can you tell the difference between high C or Do and low C or Do?",
-    "Now, we're going to add in Sol (G)",
-    "Now, we're going to add in Mi (E)",
-    "Now, I'm going to ask you to play two notes in a row",
-    "Now, we'll add in Re (D)",
-    "Let's try some 3 note sequences",
-    "Now, we're addin in La (A)",
-    "We'll at in Ti (B) this time to finish our full scale",
-    "Now, I'm going to ask you to play 3 notes in a row",
-    "Finally, I'm going to you ask you to play 4 notes in a row",
+    "Now, we're going to add in Sol (G)!",
+    "Now, we're going to add in Mi (E)!",
+    "Now, I'm going to ask you to play two notes in a row!",
+    "Now, we'll add in Re (D)!",
+    "Let's try some 3 note sequences!",
+    "Now, we'll add in in La (A)!",
+    "Now, we'll add in Fa (F)!",
+    "We'll at in Ti (B) this time to finish our full scale!",
+    "Now, I'm going to ask you to play 3 notes in a row!",
+    "Finally, I'm going to you ask you to play 4 notes in a row!"
 ].cycle
 
 [g1l1, g1l2, g1l3, g1l4, g1l5, g1l6, g1l7, g1l8, g1l9, g1l10, g1l11].each_with_index do |level, i|
-    lev = Level.create(level_num: i+1, level_message: g1messages.next)
-    game1.levels << lev
+    lev = Level.create(level_num: i+1, level_message: g1messages.next, game: game1)
+    # game1.levels << lev
     level.each do |question|
         questionString = question.map{|n| n.pitch_name}.join(', ') # is this going to create extra commas?
-        quest1 = Question.create(question_text: "#{question.length<=1 ? 'Play a ' : 'Play these notes in order: '}#{questionString}!", use_solfege: false)
-        debugger
+        quest1 = Question.create(level: lev, question_text: "#{question.length<=1 ? 'Play a ' : 'Play these notes in order: '}#{questionString}!", use_solfege: false)
+        # debugger
         quest1.assign_notes(question)
-        lev.questions << quest1
+        # lev.questions << quest1
         questionString = question.map{|n| n.solfege_value}.join(', ') # is this going to create extra commas?
-        quest2 = Question.create(question_tex: "#{question.length>1 ? 'Play a ' : 'Please these notes in order: '}#{questionString}!")
+        quest2 = Question.create(level: lev, question_text: "#{question.length<=1 ? 'Play a ' : 'Please these notes in order: '}#{questionString}!")
         quest2.assign_notes(question)
-        lev.questions << quest2
+        # lev.questions << quest2
     end
 end
 
