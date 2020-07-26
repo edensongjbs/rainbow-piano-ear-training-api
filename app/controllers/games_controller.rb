@@ -1,9 +1,9 @@
 class GamesController < ApplicationController
     def show
-        game = Game.all[params[:game].to_i-1]
+        game = Game.all[params[:id].to_i-1]
         level = game.levels.find_by(level_num: (params[:level].to_i))
         if !level 
-            level = Game.levels.last
+            level = game.levels.last
         end
         qs = select_questions(game, level)
         render json: custom_serialize(qs, game, level)
@@ -29,7 +29,8 @@ class GamesController < ApplicationController
     def custom_serialize(qs, game, level)
         full_obj = {
             questions:[], 
-            game_message: game.intro_message, 
+            game_message: game.intro_message,
+            order_matters: game.order_matters, 
             game_intro_sound: game.intro_sound_url,
             play_first: game.play_first,
             chords_allowed: game.chords_allowed,
@@ -44,6 +45,10 @@ class GamesController < ApplicationController
                 text: q.question_text,
                 sound_url: q.sound_url,
                 use_solfege: q.use_solfege,
+                play_first: q.level.game.play_first,
+                order_matters: q.level.game.order_matters,
+                chords_allowed: q.level.game.chords_allowed,
+                arpeggiated: q.level.arpeggiated,
                 notes: []
             }
             q.notes_in_order.each do |n|
