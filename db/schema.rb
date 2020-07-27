@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_23_202157) do
+ActiveRecord::Schema.define(version: 2020_07_27_212113) do
 
   create_table "chord_levels", force: :cascade do |t|
     t.integer "chord_id"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 2020_07_23_202157) do
     t.boolean "list_note_names", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "either_c", default: false
   end
 
   create_table "levels", force: :cascade do |t|
@@ -54,6 +55,7 @@ ActiveRecord::Schema.define(version: 2020_07_23_202157) do
     t.string "level_message_sound_url", default: ""
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "demo_notes"
   end
 
   create_table "note_questions", force: :cascade do |t|

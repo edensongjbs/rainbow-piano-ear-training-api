@@ -49,6 +49,8 @@ class GamesController < ApplicationController
                 order_matters: q.level.game.order_matters,
                 chords_allowed: q.level.game.chords_allowed,
                 arpeggiated: q.level.arpeggiated,
+                demo_notes: q.level.demo_notes.split(':'),
+                either_c: q.level.game.either_c,
                 notes: []
             }
             q.notes_in_order.each do |n|
