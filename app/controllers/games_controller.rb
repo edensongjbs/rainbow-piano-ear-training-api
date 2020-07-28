@@ -12,7 +12,7 @@ class GamesController < ApplicationController
     private
 
     def select_questions(game, level, num_new=4, num_old=2)
-        old_levels = Level.all.select{|l| l.level_num<level.level_num}
+        old_levels = game.levels.select{|l| l.level_num<level.level_num}
         questions = level.questions.sample(num_new)
         if old_levels.length > 0
             (num_old).times do
