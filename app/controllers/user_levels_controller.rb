@@ -1,9 +1,9 @@
 class UserLevelsController < ApplicationController
     def update
-        byebug
+        # byebug
         user_level = UserLevel.find(params[:id])
         user_level.update_attributes(user_level_params)
-        byebug
+        # byebug
         render json: user_level
     end
 

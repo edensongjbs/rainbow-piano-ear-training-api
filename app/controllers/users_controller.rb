@@ -19,6 +19,12 @@ class UsersController < ApplicationController
         end
     end
 
+    def destroy
+        @logged_in_user.user_levels.destroy_all
+        @logged_in_user.destroy
+        render json: {message: "User successfully Destroyed"}
+    end
+
     # def current_user
     #     headers = request.headers["Authorization"]
     #     token = headers.split(" ")[1]

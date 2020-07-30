@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   get '/users' => 'users#index'
   post '/auth' => 'auth#create'
   patch '/user_levels/:id' => 'user_levels#update'
+  delete '/users' => 'users#destroy'
 end
