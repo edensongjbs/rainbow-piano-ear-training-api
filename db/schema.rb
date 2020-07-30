@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_27_212113) do
+ActiveRecord::Schema.define(version: 2020_07_29_133821) do
 
   create_table "chord_levels", force: :cascade do |t|
     t.integer "chord_id"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 2020_07_27_212113) do
     t.string "email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "first_name"
   end
 
 end

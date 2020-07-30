@@ -1,33 +1,42 @@
 class GamesController < ApplicationController
     def show
         game = Game.all[params[:id].to_i-1]
-        level = game.levels.find_by(level_num: (params[:level].to_i))
-        if !level 
-            level = game.levels.last
-        end
-        qs = select_questions(game, level)
-        render json: custom_serialize(qs, game, level)
+        lev = game.levels.find_by(level_num: (params[:level].to_i))
+        user = @logged_in_user
+        user_level = user.serve_level(lev)
+        # high_level = user.highest_completed_level(game)
+        # if !level 
+        #     level = game.levels.last
+        #
+        # byebug
+        qs = ( game==Game.all[1] || game==Game.all[2] || user_level.level.level_num == 1) ? select_questions(game, user_level.level, 6, 0) : select_questions(game, user_level.level)
+        # byebug
+        render json: custom_serialize(qs, game, user_level.level, user_level.id)
     end
 
     private
 
     def select_questions(game, level, num_new=4, num_old=2)
+        # byebug
         old_levels = game.levels.select{|l| l.level_num<level.level_num}
-        questions = level.questions.sample(num_new)
-        if old_levels.length > 0
+        questions = []
+        (num_new).times {questions << level.questions.sample}
+        if num_old > 0
             (num_old).times do
                 l = old_levels.sample
                 # byebug
                 questions << l.questions.sample
             end
-        else
-            (num_old).times {questions << level.questions.sample}
+        # else
+            # (num_old).times {questions << level.questions.sample}
         end
+        # byebug
         return questions.shuffle
     end
 
-    def custom_serialize(qs, game, level)
+    def custom_serialize(qs, game, level, user_level_id)
         full_obj = {
+            user_level_id: user_level_id,
             questions:[], 
             game_message: game.intro_message,
             order_matters: game.order_matters, 

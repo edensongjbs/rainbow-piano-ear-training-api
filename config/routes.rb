@@ -3,4 +3,7 @@ Rails.application.routes.draw do
   get '/chords' => 'chords#index'
   get '/games/:id' => 'games#show'
   post '/users' => 'users#create'
+  get '/users' => 'users#index'
+  post '/auth' => 'auth#create'
+  patch '/user_levels/:id' => 'user_levels#update'
 end
